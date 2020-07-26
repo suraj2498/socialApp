@@ -7,6 +7,7 @@ import {connect} from 'react-redux';
 import { likePost, unlikePost } from '../redux/actions/dataActions';
 import DeletePost from './DeletePost'; 
 import PropTypes from 'prop-types';
+import PostDialog from './PostDialog';
 
 // Mui Stuff
 import Card from '@material-ui/core/Card';
@@ -103,7 +104,7 @@ function Post(props) {
                     <ChatIcon color="secondary" />
                 </MyButton>
                 <span>{commentCount} Comments</span>
-
+                <PostDialog postId={postId} userHandle={userHandle} />
             </CardContent>
         </Card>
     )

@@ -17,13 +17,3 @@ html, body{
 a{
   text-decoration: none;
 }
-
-#post{
-  position: relative;
-}
-
-#deleteIcon {
-  position: absolute;
-  bottom: 7px;
-  right: 7px;
-}

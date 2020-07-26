@@ -1,4 +1,5 @@
 import {SET_USER, SET_ERRORS, CLEAR_ERRORS, LOADING_UI, SET_UNAUTHENTICATED, LOADING_USER} from '../types';
+import { getPosts } from './dataActions';
 import axios from 'axios';
 
 export const loginUser = (userData, history) => async (dispatch) => {
@@ -68,7 +69,8 @@ export const uploadImage = (formData) => async (dispatch) => {
     try {
         dispatch ({ type: LOADING_USER });
         await axios.post('/user/image', formData);
-        dispatch(getUserData()); // jsut return the user details with the  new image
+        dispatch(getUserData()); // jsut return the user details with the new image
+        dispatch(getPosts());
     } catch (err) {
         dispatch({
             type: SET_ERRORS,
