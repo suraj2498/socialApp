@@ -3,26 +3,21 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Link } from 'react-router-dom';
-import { uploadImage, logoutUser } from '../redux/actions/userActions';
+import { uploadImage, logoutUser } from '../../redux/actions/userActions';
 import EditDetails from './EditDetails'; 
-import MyButton from '../util/MyButton';
+import MyButton from '../../util/MyButton';
 import dayjs from 'dayjs';
-
 // MUI Stuff
 import Button from '@material-ui/core/Button';
 import MuiLink from '@material-ui/core/Link';
 import Typography  from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-
 // MUI Icons
 import LocationOn from '@material-ui/icons/LocationOn';
 import LinkIcon from '@material-ui/icons/Link';
 import CalendarToday from '@material-ui/icons/CalendarToday';
 import EditIcon from '@material-ui/icons/Edit';
 import Exit from '@material-ui/icons/ExitToApp';
-
 
 const styles = {
     paper: {

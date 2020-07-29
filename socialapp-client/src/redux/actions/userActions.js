@@ -1,4 +1,4 @@
-import {SET_USER, SET_ERRORS, CLEAR_ERRORS, LOADING_UI, SET_UNAUTHENTICATED, LOADING_USER} from '../types';
+import {SET_USER, SET_ERRORS, CLEAR_ERRORS, LOADING_UI, SET_UNAUTHENTICATED, LOADING_USER, MARK_NOTIFICATIONS_READ} from '../types';
 import { getPosts } from './dataActions';
 import axios from 'axios';
 
@@ -69,7 +69,7 @@ export const uploadImage = (formData) => async (dispatch) => {
     try {
         dispatch ({ type: LOADING_USER });
         await axios.post('/user/image', formData);
-        dispatch(getUserData()); // jsut return the user details with the new image
+        await dispatch(getUserData()); // jsut return the user details with the new image
         dispatch(getPosts());
     } catch (err) {
         dispatch({
@@ -89,6 +89,17 @@ export const editUserDetails = (userDetails) => async (dispatch) => {
             type: SET_ERRORS,
             payload: err.response.data
         })
+    }
+}
+
+export const markNotificationsRead = (notificationIds) => async (dispatch) => {
+    try {
+        await axios.post('/notifications', notificationIds);
+        dispatch({
+            type: MARK_NOTIFICATIONS_READ,
+        });   
+    } catch (err) {
+        console.error(err);
     }
 }
 

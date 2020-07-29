@@ -5,9 +5,9 @@ import { getPosts } from '../redux/actions/dataActions';
 import PropTypes from 'prop-types';
 
 // Components
-import Post from '../components/Post';
+import Post from '../components/post/Post';
 import { Container } from '@material-ui/core';
-import Profile from '../components/Profile'
+import Profile from '../components/profile/Profile'
 
 class home extends Component {
 

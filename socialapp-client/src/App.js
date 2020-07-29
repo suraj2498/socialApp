@@ -16,9 +16,10 @@ import {logoutUser, getUserData } from './redux/actions/userActions';
 import Home from './pages/home';
 import Register from './pages/register';
 import Login  from './pages/login';
+import User from './pages/User';
 
 // Components
-import Navbar from './components/Navbar';
+import Navbar from './components/layout/Navbar';
 import AuthRoute from './util/AuthRoute'; 
 
 
@@ -30,6 +31,10 @@ const theme = createMuiTheme({
     },
     secondary: {
       main: '#1A73E8',
+      contrastText: '#fff'
+    },
+    red: {
+      main: '#E8393C',
       contrastText: '#fff'
     }
   },
@@ -63,6 +68,8 @@ function App() {
                 <Route exact path='/' component={Home}/>
                 <AuthRoute exact path='/register' component={Register}/>
                 <AuthRoute exact path='/login' component={Login}/>
+                <Route exact path='/users/:handle' component={User} />
+                <Route exact path="/users/:handle/post/:postId" component={User} />
               </Switch>
             </div>
         </Router>

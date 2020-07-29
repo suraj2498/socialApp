@@ -1,4 +1,4 @@
-import {SET_USER, SET_AUTHENTICATED, SET_UNAUTHENTICATED, LOADING_USER, LIKE_POST, UNLIKE_POST} from '../types';
+import {SET_USER, SET_AUTHENTICATED, SET_UNAUTHENTICATED, LOADING_USER, LIKE_POST, UNLIKE_POST, MARK_NOTIFICATIONS_READ} from '../types';
 
 // Inital state is for the user reducers and will be joined with other inital states via the store
 const initialState = {
@@ -32,6 +32,12 @@ export default (state = initialState, action) => {
                 return{
                     ...state,
                     loading:true
+                }
+            
+            case MARK_NOTIFICATIONS_READ:
+                state.notifications.forEach(not => not.read = true);
+                return {
+                    ...state
                 }
             
             case LIKE_POST:

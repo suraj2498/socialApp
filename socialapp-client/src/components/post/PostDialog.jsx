@@ -1,21 +1,22 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { getPost } from '../redux/actions/dataActions';
+import { getPost } from '../../redux/actions/dataActions';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
-import MyButton from '../util/MyButton';
+import MyButton from '../../util/MyButton';
+import LikeButton from './LikeButton';
+import Comments from './Comments'
+import CommentForm from './CommentForm';
 // MUI Stuff
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 // Icons
 import UnfoldMore from '@material-ui/icons/UnfoldMore';
+import ChatIcon from '@material-ui/icons/Chat'
 import { CircularProgress } from '@material-ui/core';
 
 
@@ -23,6 +24,11 @@ const styles = {
     invisibleSeperator: {
         border: 'none',
         margin: 4
+    },
+    visibleSeperator: {
+        width: '100%',
+        borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+        marginBottom: '20px'
     },
     profileImage: {
         maxWidth: 150,
@@ -42,20 +48,43 @@ const styles = {
     },
     spinner: {
         textAlign: 'center'
+    },
+    flex: {
+        display: 'flex',
+        alignItems: 'center'
     }
 }
 
 function PostDialog(props) {
 
     const[open, setOpen] = useState(false);
-    const { classes, getPost, postId, post, UI: { loading } } = props;
+    const[oldPath, setOldPath] = useState('')
+
+    const { classes, getPost, postId, userHandle, authenticated, UI: { loading }, 
+            post: { createdAt, userImage, body, likeCount, commentCount, comments }} = props;
+
+    useEffect(() => {
+        console.log(props.openDialog);
+        if(props.openDialog)
+            handleOpen();
+        // eslint-disable-next-line
+    }, [])
 
     const handleOpen = () => {
+
+        setOldPath(window.location.pathname);
+        const newPath = `/users/${userHandle}/post/${postId}`;
+
+        if(oldPath === newPath)
+            setOldPath(`/users/${userHandle}`);
+
+        window.history.pushState(null, null, newPath);
         setOpen(true);
-        getPost(postId)
+        getPost(postId);
     }
 
     const handleClose = () => {
+        window.history.pushState(null, null, oldPath);
         setOpen(false);
     }
 
@@ -66,28 +95,42 @@ function PostDialog(props) {
     ) : (
         <Grid container spacing={4}>
             <Grid item sm={5}>
-                <img src={post.userImage} alt="user" className={classes.profileImage}/>
+                <img src={userImage} alt="user" className={classes.profileImage}/>
             </Grid>
             <Grid item sm={7} className={classes.text}>
                 <Typography component={Link}
                 color="secondary"
                 variant="h5"
-                to={`users/${post.userHandle}`}>
-                    @{post.userHandle}
+                to={`users/${userHandle}`}>
+                    @{userHandle}
                 </Typography>
                 
                 <hr className={classes.invisibleSeperator}/>
 
                 <Typography variant="body2" color="primary">
-                    {dayjs(post.createdAt).format('h:mm a, MMMM DD YYYY')}
+                    {dayjs(createdAt).format('h:mm a, MMMM DD YYYY')}
                 </Typography>
 
                 <hr className={classes.invisibleSeperator}/>
 
                 <Typography variant="body1">
-                    {post.body}
+                    {body}
                 </Typography>
+
+                <div className={classes.flex}>
+                    <LikeButton postId={postId}/> 
+                    { likeCount } Likes
+                    <MyButton tip="comment">
+                        <ChatIcon color="secondary" />
+                    </MyButton>
+                    {commentCount} Comments 
+                </div>
             </Grid>
+            {!authenticated && (
+                <hr className={classes.visibleSeperator}/>
+            )}
+            <CommentForm postId={postId} />
+            <Comments comments={comments} />
         </Grid>
     )
 
@@ -111,11 +154,13 @@ PostDialog.propTypes = {
     userHandle: PropTypes.string.isRequired,
     postId: PropTypes.string.isRequired,
     UI: PropTypes.object.isRequired,
+    authenticated: PropTypes.bool.isRequired,
     post: PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state) => ({
     post: state.data.post,
+    authenticated: state.user.authenticated,
     UI: state.UI
 })
 

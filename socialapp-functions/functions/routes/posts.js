@@ -123,7 +123,7 @@ exports.makeComment = async (req, res) => {
         if(doc.exists){
             await doc.ref.update({commentCount: doc.data().commentCount + 1});
             const commentDoc = await db.collection('comments').add(newComment);
-            return res.json({message: `Comment ${commentDoc.id} made successfully`});
+            return res.json(newComment);
         }
         return res.status(404).json({message: 'Post does not exist'});
     } catch (err) {

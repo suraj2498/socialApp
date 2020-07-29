@@ -1,5 +1,5 @@
 import { SET_POST, SET_POSTS, LIKE_POST, UNLIKE_POST, 
-        LOADING_DATA, DELETE_POST, MAKE_POST} from '../types';
+        LOADING_DATA, DELETE_POST, MAKE_POST, SUBMIT_COMMENT} from '../types';
 
 const initialState = {
     posts: [],
@@ -35,8 +35,19 @@ export default (state = initialState, action) => {
             // resetting the corresponding post in the posts array with the new like count
             let index = state.posts.findIndex((post) => post.postId === action.payload.postId);
             state.posts[index] = action.payload;
+            if(state.post.postId === action.payload.postId)
+                state.post = action.payload;
             return{
                 ...state
+            }
+
+        case SUBMIT_COMMENT:
+            return {
+                ...state,
+                post: {
+                    ...state.post,
+                    comments: [action.payload, ...state.post.comments]
+                }
             }
         
         case DELETE_POST:

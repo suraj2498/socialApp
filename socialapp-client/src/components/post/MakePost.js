@@ -2,8 +2,8 @@ import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { makePost } from '../redux/actions/dataActions';
-import MyButton from '../util/MyButton';
+import { makePost } from '../../redux/actions/dataActions';
+import MyButton from '../../util/MyButton';
 // MUI Stuff
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';

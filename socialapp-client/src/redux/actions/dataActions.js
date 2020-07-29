@@ -1,5 +1,5 @@
 import { SET_POSTS, LOADING_DATA, LIKE_POST, UNLIKE_POST, DELETE_POST, LOADING_UI, MAKE_POST,
-         SET_ERRORS, CLEAR_ERRORS, SET_POST, STOP_LOADING_UI } from '../types';
+         SET_ERRORS, CLEAR_ERRORS, SET_POST, STOP_LOADING_UI, SUBMIT_COMMENT } from '../types';
 import axios from 'axios';
 
 // Get all posts
@@ -77,6 +77,23 @@ export const unlikePost = (postId) => async (dispatch) => {
     }
 }
 
+export const submitComment = (postId, commentData) => async (dispatch) => {
+    try {
+        const res = await axios.post(`/posts/${postId}/comment`, commentData);   
+        dispatch({
+            type: SUBMIT_COMMENT,
+            payload: res.data
+        });
+        dispatch(getPost(postId));
+        dispatch({type: CLEAR_ERRORS});
+    } catch (err) {
+        dispatch({
+            type: SET_ERRORS,
+            payload: err.response.data
+        })
+    }
+}
+
 // Delete a post
 export const deletePost = (postId) => async (dispatch) => {
     try {
@@ -87,5 +104,22 @@ export const deletePost = (postId) => async (dispatch) => {
         });
     } catch (err) {
         console.error(err);
+    }
+}
+
+export const  getUserPageInfo = (userHandle) => async (dispatch) => {
+    try {
+        dispatch({ type: LOADING_DATA });
+        const res = await axios.get(`/user/${userHandle}`);
+        dispatch({ 
+            type: SET_POSTS,
+            payload: res.data.posts
+        });
+        
+    } catch (err) {
+        dispatch({ 
+            type: SET_POSTS,
+            payload: [] 
+        });
     }
 }

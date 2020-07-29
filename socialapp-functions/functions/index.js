@@ -22,7 +22,7 @@ app.post('/user/image', auth, uploadImage); // upload an image
 app.post('/user', auth, addUserDetails); // Add user details
 app.get('/user', auth, getUser); // get info about user
 app.get('/user/:handle', getUserDetails);
-app.post('/notifications', auth, markNotificationsRead)
+app.post('/notifications', auth, markNotificationsRead) // Marks all notifications as read
 
 exports.createNotificationOnlike = functions.firestore.document('/likes/{id}').onCreate(async (snapshot) => {
     try {
